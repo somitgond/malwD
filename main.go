@@ -17,18 +17,20 @@ func main() {
 
 	fmt.Printf("Your input number is: %d \n", user_input)
 	
-	// based on user input decide what to do
+	// based on user input decide what to 
 	switch user_input {
 	case 1:
 		fmt.Print("Input file path: ")
 		var file_path string
-		fmt.Scanln(&file_path);		
+		fmt.Scanln(&file_path);
+		//		file_path = "/home/jack/github/malwD/" + file_path
 		fmt.Printf("Your input file is: %s\n", file_path)
 
 		// check if file exists or not
-		// if file_exist(file_path) {
-		// scan_file(file_path)
-		// }
+		if file_exists(file_path) {
+			fmt.Println("File exists")
+			scan_file(file_path)
+		 }
 	case 2:
 		fmt.Print("Input directory path: ")
 		var directory_path string
@@ -36,9 +38,10 @@ func main() {
 		fmt.Printf("Your input directory is: %s\n", directory_path)
 		
 		// check if file exists or not
-		// if directory_exist(directory_path) {
+		if directory_exists(directory_path) {
+			fmt.Println("Directory exists")
 		// directory_file(directory_path)
-		// }
+		}
 	case 3:
 		fmt.Print("Input file signature: ")
 		var file_signature string

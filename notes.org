@@ -1,0 +1,8 @@
+
+
+* NOTES
+Code against malware: using golang to write the tool
+
+* RESOURCES
+- Golang SQLite3: Working with SQLite in Go: https://sqldocs.org/sqlite-database/golang-sqlite/
+- 
