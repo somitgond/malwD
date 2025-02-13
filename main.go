@@ -17,10 +17,14 @@ import (
 
 var db *sql.DB // Global variable
 var total int
+var scannedPIDs = make(map[int]bool) // Keep track of scanned PIDs
+
 func initDB() {
+	// database file name
 	dbFile := "SIGNATURES.db"
 	
 	var err error
+	
 	// Open database connection
 	db, err = sql.Open("sqlite3", dbFile)
 	if err != nil {
@@ -150,33 +154,41 @@ func monitorDirectory(dir string) {
 	}
 }
 
-func getProcessExecutables() {
-	procDir := "/proc"
-	fmt.Println("Scanning")
-	entries, err := os.ReadDir(procDir)
-	if err != nil {
-		log.Fatal("Failed to read /proc:", err)
-		fmt.Println("Failed to read /proc:", err)
-	}
+func monitorProcesses() {
+	fmt.Println("Monitoring processes in real-time...")
 
-	for _, entry := range entries {
-		if entry.IsDir() {
-			// Check if the directory name is a number (PID)
-			pid, err := strconv.Atoi(entry.Name())
-			if err != nil {
-				continue // Skip non-numeric entries
-			}
+	for {
+		procDir := "/proc"
+		entries, err := os.ReadDir(procDir)
+		if err != nil {
+			log.Println("Error reading /proc:", err)
+			continue
+		}
 
-			exePath := filepath.Join(procDir, entry.Name(), "exe")
+		for _, entry := range entries {
+			if entry.IsDir() {
+				// Convert directory name (PID) to an integer
+				pid, err := strconv.Atoi(entry.Name())
+				if err != nil {
+					continue // Skip non-numeric directories
+				}
 
-			// Resolve the symlink to get the actual executable path
-			executable, err := os.Readlink(exePath)
-			if err == nil {
-				scanFile(executable)
-			} else if err != nil && !os.IsNotExist(err) {
-				fmt.Printf("Error reading executable for PID %d: %v\n", pid, err)
+				// Skip if already scanned
+				if scannedPIDs[pid] {
+					continue
+				}
+
+				// Get the executable path
+				exePath := filepath.Join(procDir, entry.Name(), "exe")
+				executable, err := os.Readlink(exePath)
+				if err == nil {
+					scanFile(executable)
+					scannedPIDs[pid] = true // Mark as scanned
+				}
 			}
 		}
+
+		time.Sleep(2 * time.Second) // Adjust delay as needed
 	}
 }
 
@@ -244,36 +256,10 @@ func main() {
 		}
 
 	case 5:
-		//fmt.Println("Start scanning processes....")
+		fmt.Println("Start scanning processes....")
 		//getProcessExecutables()
+		monitorProcesses()
 
-		fmt.Println("Scanning")
-		procDir := "/proc"
-		entries, err := os.ReadDir(procDir)
-		if err != nil {
-			log.Fatal("Failed to read /proc:", err)
-			fmt.Println("Failed to read /proc:", err)
-		}
-
-		for _, entry := range entries {
-			if entry.IsDir() {
-				// Check if the directory name is a number (PID)
-				pid, err := strconv.Atoi(entry.Name())
-				if err != nil {
-					continue // Skip non-numeric entries
-				}
-
-				exePath := filepath.Join(procDir, entry.Name(), "exe")
-
-				// Resolve the symlink to get the actual executable path
-				executable, err := os.Readlink(exePath)
-				if err == nil {
-					scanFile(executable)
-				} else if err != nil && !os.IsNotExist(err) {
-					fmt.Printf("Error reading executable for PID %d: %v\n", pid, err)
-				}
-			}
-		}
 	case 6:
 		fmt.Print("Exiting...\n")
 		fmt.Println("not printing")
