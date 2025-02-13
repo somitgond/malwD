@@ -3,6 +3,10 @@
 * NOTES
 Code against malware: using golang to write the tool
 
+* progress
+- instead of making connection to database in db_ops.go, make connection in main.go only
+
+
 * RESOURCES
 - Golang SQLite3: Working with SQLite in Go: https://sqldocs.org/sqlite-database/golang-sqlite/
-- 
+- We can also scan the processes running on the system 
