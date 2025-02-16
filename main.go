@@ -239,15 +239,15 @@ func main() {
 			"43c5a487329f5d6b4a6d02e2f8ef62744b850312c5cb87c0a414f3830767be72",
 			"8e9a33809b9062c5033928f82e8adacbef6cd7b40e73da9fcf13ec2493b4544c",
 			"c0869e7f1bb4914fa453db5eb9cafd6fea090f7c6c156b9f1a3479e0ce7f4df2",
-			"2c14356e0a6a9019c50b069e88fe58abbbc3c93451a74e3e66f8c1a2a831e9ba"
+			"2c14356e0a6a9019c50b069e88fe58abbbc3c93451a74e3e66f8c1a2a831e9ba",
 	}
 
-	for index, ss := range malware_signatures {
+	for _ , ss := range malware_signatures {
 		if !checkSignatureInDB(db, ss) {
 			if err := addSignature(db, ss); err != nil {
 				fmt.Println("Error inserting signature:", err)
 			} else {
-				fmt.Println("Signature added successfully.")
+				//fmt.Println("Signature added successfully.")
 			}
 		}
 	}
