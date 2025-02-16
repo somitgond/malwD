@@ -1,13 +1,16 @@
 * malwD
-A malware detector application written in golang.
+A malware detector application written in golang. It is written for the linux platform.
 
 * How To
-- The code is written in go lang. You can compile the code on your machine or use the binary.
-- You only need the binary to run the program.
-- Various options are given when the program is executed.
-- This program is written for linux only.
-
-
+** Build the binary
+- Run these commands to make a binary named "malwD" in the cloned folder
+#+BEGIN_SRC sh
+  git clone https://github.com/somitgond/malwD.git && cd malwD
+  go get
+  go build
+#+END_SRC
+- Then run the binary.
+    
 * Example:
 when you run the binary:
 #+CAPTION: Startup screen
