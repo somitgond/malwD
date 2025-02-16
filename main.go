@@ -8,11 +8,11 @@ import (
 	"github.com/fsnotify/fsnotify"
 	_ "github.com/mattn/go-sqlite3"
 	"io"
-	"syscall"
 	"log"
 	"os"
 	"path/filepath"
 	"strconv"
+	"syscall"
 	"time"
 )
 
@@ -229,20 +229,21 @@ func main() {
 	defer db.Close()
 
 	// hard coded malware signatures
-	malware_signatures := []string {
+	malware_signatures := []string{
+		"244591cb0ce6c918ce44073ca88f6d86eda7bea01452db13d042ff95263bde10",
 		"e1321a4b2b104f31aceaf4b19c5559e40ba35b73a754d3ae13d8e90c53146c0f",
-			"74f497088b49b745e6377b32ed5d9dfaef3c84c7c0bb50fabf30363ad2e0bfb1",
-			"3d2b58ef6df743ce58669d7387ff94740ceb0122c4fc1c4ffd81af00e72e60a4",
-			"30430bcfeee8141ba1dba3983c9a8d89f3c1acf5b8efd0d97f23d4a122c0787a",
-			"f25b7f11e9f34ee5d91b3e07ba22925022e8b8b05c3ddf6672ae86e5144481cf",
-			"718d6f185fdc2d9fd206914c2b05f85e3c50b53c705071c09cebdf44cff34768",
-			"43c5a487329f5d6b4a6d02e2f8ef62744b850312c5cb87c0a414f3830767be72",
-			"8e9a33809b9062c5033928f82e8adacbef6cd7b40e73da9fcf13ec2493b4544c",
-			"c0869e7f1bb4914fa453db5eb9cafd6fea090f7c6c156b9f1a3479e0ce7f4df2",
-			"2c14356e0a6a9019c50b069e88fe58abbbc3c93451a74e3e66f8c1a2a831e9ba",
+		"74f497088b49b745e6377b32ed5d9dfaef3c84c7c0bb50fabf30363ad2e0bfb1",
+		"3d2b58ef6df743ce58669d7387ff94740ceb0122c4fc1c4ffd81af00e72e60a4",
+		"30430bcfeee8141ba1dba3983c9a8d89f3c1acf5b8efd0d97f23d4a122c0787a",
+		"f25b7f11e9f34ee5d91b3e07ba22925022e8b8b05c3ddf6672ae86e5144481cf",
+		"718d6f185fdc2d9fd206914c2b05f85e3c50b53c705071c09cebdf44cff34768",
+		"43c5a487329f5d6b4a6d02e2f8ef62744b850312c5cb87c0a414f3830767be72",
+		"8e9a33809b9062c5033928f82e8adacbef6cd7b40e73da9fcf13ec2493b4544c",
+		"c0869e7f1bb4914fa453db5eb9cafd6fea090f7c6c156b9f1a3479e0ce7f4df2",
+		"2c14356e0a6a9019c50b069e88fe58abbbc3c93451a74e3e66f8c1a2a831e9ba",
 	}
 
-	for _ , ss := range malware_signatures {
+	for _, ss := range malware_signatures {
 		if !checkSignatureInDB(db, ss) {
 			if err := addSignature(db, ss); err != nil {
 				fmt.Println("Error inserting signature:", err)
@@ -252,8 +253,6 @@ func main() {
 		}
 	}
 
-
-	
 	fmt.Println(`Welcome to malware detector
 1. To scan a file
 2. To scan a folder/directory
